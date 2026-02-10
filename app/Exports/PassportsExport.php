@@ -3,9 +3,9 @@
 namespace App\Exports;
 
 use App\Models\Passport;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PassportsExport implements FromCollection, WithHeadings, WithStyles
@@ -21,9 +21,8 @@ class PassportsExport implements FromCollection, WithHeadings, WithStyles
                 'date_of_birth' => $passport->date_of_birth,
                 'lga' => $passport->lga,
                 'nationality' => $passport->nationality,
-                'passport_number' => $passport->passport_number,
-                'document_number' => $passport->document_number ?? '',
-                'document_expiry_date' => $passport->document_expiry_date ?? '',
+                'passport_number' => $passport->passport_number ?? '',
+                'expiry_date' => $passport->expiry_date ?? '',
             ];
         });
     }
@@ -38,7 +37,6 @@ class PassportsExport implements FromCollection, WithHeadings, WithStyles
             'Date of Birth',
             'LGA',
             'Nationality',
-            'Passport No.',
             'Document Number',
             'Document Expiry Date',
         ];

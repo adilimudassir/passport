@@ -147,8 +147,8 @@
                                     {{ $passport->nationality }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->document_number }}</td>
-                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->document_expiry_date }}</td>
+                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->passport_number }}</td>
+                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->expiry_date }}</td>
                             <td class="px-4 py-3 text-right">
                                 <button wire:click="deletePassport({{ $passport->id }})"
                                         wire:confirm="Delete this record?"
