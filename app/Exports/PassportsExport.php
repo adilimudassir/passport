@@ -12,31 +12,35 @@ class PassportsExport implements FromCollection, WithHeadings, WithStyles
 {
     public function collection()
     {
-        return Passport::all([
-            'lga',
-            'lastname',
-            'givennames',
-            'gender',
-            'date_of_birth',
-            'expiry_date',
-            'passport_number',
-            'nationality',
-            'created_at',
-        ]);
+        return Passport::all()->map(function ($passport, $index) {
+            return [
+                'sn' => $index + 1,
+                'givennames' => $passport->givennames,
+                'lastname' => $passport->lastname,
+                'gender' => $passport->gender,
+                'date_of_birth' => $passport->date_of_birth,
+                'lga' => $passport->lga,
+                'nationality' => $passport->nationality,
+                'passport_number' => $passport->passport_number,
+                'document_number' => $passport->document_number ?? '',
+                'document_expiry_date' => $passport->document_expiry_date ?? '',
+            ];
+        });
     }
 
     public function headings(): array
     {
         return [
-            'LGA',
-            'Last Name',
+            'S/N',
             'Given Names',
+            'Last Name',
             'Gender',
             'Date of Birth',
-            'Expiry Date',
-            'Passport Number',
+            'LGA',
             'Nationality',
-            'Captured At',
+            'Passport No.',
+            'Document Number',
+            'Document Expiry Date',
         ];
     }
 

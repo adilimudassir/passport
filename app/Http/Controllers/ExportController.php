@@ -11,9 +11,9 @@ class ExportController extends Controller
 {
     public function xlsx()
     {
-        $filename = 'passports_' . now()->format('Y-m-d_His') . '.xlsx';
+        $filename = 'passports_' . now()->format('Y-m-d_His') . '.csv';
         
-        return Excel::download(new PassportsExport, $filename);
+        return Excel::download(new PassportsExport, $filename, \Maatwebsite\Excel\Excel::CSV);
     }
 
     public function pdf()

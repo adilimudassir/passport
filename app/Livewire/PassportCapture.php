@@ -48,6 +48,11 @@ class PassportCapture extends Component
         'Wamako',
         'Wurno',
         'Yabo',
+        'PWA',
+        'SGO',
+        'HSS',
+        'ALGON',
+        'NONE'
     ];
 
     public function mount(): void
@@ -148,13 +153,13 @@ class PassportCapture extends Component
         $parts = explode(',', $raw);
         
         return [
-            'lastname' => isset($parts[0]) ? substr(trim($parts[0]), 3) : '',
-            'givennames' => isset($parts[1]) ? substr(trim($parts[1]), 3) : '',
-            'gender' => isset($parts[2]) ? substr(trim($parts[2]), 3) : '',
-            'date_of_birth' => isset($parts[3]) ? substr(trim($parts[3]), 3) : '',
-            'expiry_date' => isset($parts[4]) ? substr(trim($parts[4]), 3) : '',
-            'passport_number' => isset($parts[5]) ? substr(trim($parts[5]), 3) : '',
-            'nationality' => isset($parts[7]) ? substr(trim($parts[7]), 3) : '',
+            'lastname' => isset($parts[1]) ? substr(trim($parts[1]), 3) : '',
+            'givennames' => isset($parts[2]) ? substr(trim($parts[2]), 3) : '',
+            'gender' => isset($parts[3]) ? substr(trim($parts[3]), 3) : '',
+            'date_of_birth' => isset($parts[4]) ? substr(trim($parts[4]), 3) : '',
+            'expiry_date' => isset($parts[5]) ? substr(trim($parts[5]), 3) : '',
+            'passport_number' => isset($parts[6]) ? substr(trim($parts[6]), 3) : '',
+            'nationality' => isset($parts[8]) ? substr(trim($parts[8]), 3) : '',
         ];
     }
 

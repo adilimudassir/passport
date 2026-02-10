@@ -41,9 +41,9 @@
                class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg
                       bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                XLSX
+                CSV
             </a>
             <a href="{{ route('export.pdf') }}" 
                class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg
@@ -114,24 +114,26 @@
                 <table class="w-full text-sm">
                     <thead class="bg-slate-800/50">
                         <tr class="text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                            <th class="px-4 py-3">Name</th>
-                            <th class="px-4 py-3">Passport No.</th>
+                            <th class="px-4 py-3">S/N</th>
+                            <th class="px-4 py-3">Given Names</th>
+                            <th class="px-4 py-3">Last Name</th>
                             <th class="px-4 py-3">Gender</th>
-                            <th class="px-4 py-3">DOB</th>
-                            <th class="px-4 py-3">Expiry</th>
+                            <th class="px-4 py-3">Date Of Birth</th>
                             <th class="px-4 py-3">LGA</th>
                             <th class="px-4 py-3">Nationality</th>
+                            <th class="px-4 py-3">Document Number</th>
+                            <th class="px-4 py-3">Document Expiry Date</th>
                             <th class="px-4 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-700/30">
                         @forelse($passports as $passport)
                         <tr class="hover:bg-slate-800/30 transition-colors">
-                            <td class="px-4 py-3">
-                                <div class="font-medium text-slate-200">{{ $passport->lastname }}</div>
-                                <div class="text-xs text-slate-500">{{ $passport->givennames }}</div>
+                            <td class="px-4 py-3 text-slate-500">
+                                {{ $passports->firstItem() + $loop->index }}
                             </td>
-                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->passport_number }}</td>
+                            <td class="px-4 py-3 text-slate-300">{{ $passport->givennames }}</td>
+                            <td class="px-4 py-3 font-medium text-slate-200">{{ $passport->lastname }}</td>
                             <td class="px-4 py-3">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                              {{ $passport->gender === 'M' ? 'bg-blue-500/20 text-blue-400' : 'bg-pink-500/20 text-pink-400' }}">
@@ -139,13 +141,14 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-slate-300">{{ $passport->date_of_birth }}</td>
-                            <td class="px-4 py-3 text-slate-300">{{ $passport->expiry_date }}</td>
                             <td class="px-4 py-3 text-slate-400">{{ $passport->lga }}</td>
                             <td class="px-4 py-3">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-700/50 text-slate-300">
                                     {{ $passport->nationality }}
                                 </span>
                             </td>
+                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->document_number }}</td>
+                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->document_expiry_date }}</td>
                             <td class="px-4 py-3 text-right">
                                 <button wire:click="deletePassport({{ $passport->id }})"
                                         wire:confirm="Delete this record?"
@@ -158,7 +161,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-4 py-12 text-center">
+                            <td colspan="11" class="px-4 py-12 text-center">
                                 <div class="text-slate-500">
                                     <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

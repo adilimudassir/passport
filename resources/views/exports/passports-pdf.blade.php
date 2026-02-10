@@ -97,33 +97,35 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
-                <th>Passport No.</th>
-                <th>Last Name</th>
+                <th>S/N</th>
                 <th>Given Names</th>
+                <th>Last Name</th>
                 <th>Gender</th>
                 <th>Date of Birth</th>
-                <th>Expiry</th>
                 <th>LGA</th>
                 <th>Nationality</th>
+                <th>Passport No.</th>
+                <th>Document Number</th>
+                <th>Document Expiry Date</th>
             </tr>
         </thead>
         <tbody>
             @foreach($passports as $index => $passport)
             <tr>
                 <td>{{ $index + 1 }}</td>
-                <td class="passport-number">{{ $passport->passport_number }}</td>
-                <td>{{ $passport->lastname }}</td>
                 <td>{{ $passport->givennames }}</td>
+                <td>{{ $passport->lastname }}</td>
                 <td>
                     <span class="gender-badge {{ $passport->gender === 'M' ? 'gender-m' : 'gender-f' }}">
                         {{ $passport->gender }}
                     </span>
                 </td>
                 <td>{{ $passport->date_of_birth }}</td>
-                <td>{{ $passport->expiry_date }}</td>
                 <td>{{ $passport->lga }}</td>
                 <td>{{ $passport->nationality }}</td>
+                <td class="passport-number">{{ $passport->passport_number }}</td>
+                <td class="passport-number">{{ $passport->document_number }}</td>
+                <td class="passport-number">{{ $passport->document_expiry_date }}</td>
             </tr>
             @endforeach
         </tbody>
