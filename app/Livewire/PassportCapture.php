@@ -168,9 +168,9 @@ class PassportCapture extends Component
         $query = Passport::query();
 
         // Filter by selected LGA
-        if ($this->lga) {
-            $query->where('lga', $this->lga);
-        }
+        // if ($this->lga) {
+        //     $query->where('lga', $this->lga);
+        // }
 
         if ($this->search) {
             $search = '%' . $this->search . '%';

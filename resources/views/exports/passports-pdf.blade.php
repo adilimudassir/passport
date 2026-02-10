@@ -90,7 +90,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Passport Data Manifest</h1>
+        <h1>SOKOTO STATE PILGRIMS WELFARE AGENCY</h1>
         <p>Generated on {{ now()->format('F j, Y \a\t g:i A') }}</p>
     </div>
 
@@ -104,7 +104,6 @@
                 <th>Date of Birth</th>
                 <th>LGA</th>
                 <th>Nationality</th>
-                <th>Passport No.</th>
                 <th>Document Number</th>
                 <th>Document Expiry Date</th>
             </tr>
@@ -123,9 +122,8 @@
                 <td>{{ $passport->date_of_birth }}</td>
                 <td>{{ $passport->lga }}</td>
                 <td>{{ $passport->nationality }}</td>
-                <td class="passport-number">{{ $passport->passport_number }}</td>
                 <td class="passport-number">{{ $passport->document_number }}</td>
-                <td class="passport-number">{{ $passport->document_expiry_date }}</td>
+                <td class="passport-number">{{ $passport->expiry_date }}</td>
             </tr>
             @endforeach
         </tbody>
