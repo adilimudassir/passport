@@ -122,7 +122,8 @@
                             <th class="px-4 py-3">LGA</th>
                             <th class="px-4 py-3">Nationality</th>
                             <th class="px-4 py-3">Document Number</th>
-                            <th class="px-4 py-3">Document Expiry Date</th>
+                            <th class="px-4 py-3">Issue Date</th>
+                            <th class="px-4 py-3">Expiry Date</th>
                             <th class="px-4 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
@@ -148,6 +149,7 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->passport_number }}</td>
+                            <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->issue_date }}</td>
                             <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->expiry_date }}</td>
                             <td class="px-4 py-3 text-right">
                                 <button wire:click="deletePassport({{ $passport->id }})"
@@ -161,7 +163,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="11" class="px-4 py-12 text-center">
+                            <td colspan="12" class="px-4 py-12 text-center">
                                 <div class="text-slate-500">
                                     <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

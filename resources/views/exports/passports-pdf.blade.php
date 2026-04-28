@@ -105,7 +105,8 @@
                 <th>LGA</th>
                 <th>Nationality</th>
                 <th>Document Number</th>
-                <th>Document Expiry Date</th>
+                <th>Issue Date</th>
+                <th>Expiry Date</th>
             </tr>
         </thead>
         <tbody>
@@ -122,7 +123,8 @@
                 <td>{{ $passport->date_of_birth }}</td>
                 <td>{{ $passport->lga }}</td>
                 <td>{{ $passport->nationality }}</td>
-                <td class="passport-number">{{ $passport->document_number }}</td>
+                <td class="passport-number">{{ $passport->passport_number }}</td>
+                <td class="passport-number">{{ $passport->issue_date }}</td>
                 <td class="passport-number">{{ $passport->expiry_date }}</td>
             </tr>
             @endforeach

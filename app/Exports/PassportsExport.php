@@ -22,6 +22,7 @@ class PassportsExport implements FromCollection, WithHeadings, WithStyles
                 'lga' => $passport->lga,
                 'nationality' => $passport->nationality,
                 'passport_number' => $passport->passport_number ?? '',
+                'issue_date' => $passport->issue_date ?? '',
                 'expiry_date' => $passport->expiry_date ?? '',
             ];
         });
@@ -38,7 +39,8 @@ class PassportsExport implements FromCollection, WithHeadings, WithStyles
             'LGA',
             'Nationality',
             'Document Number',
-            'Document Expiry Date',
+            'Issue Date',
+            'Expiry Date',
         ];
     }
 
