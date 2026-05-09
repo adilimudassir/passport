@@ -9,8 +9,8 @@ test('passport export includes issue date in the exported rows and headings', fu
         'lastname' => 'AHMAD',
         'givennames' => 'MUDASSIR ADILI',
         'gender' => 'M',
-        'date_of_birth' => '950606',
-        'expiry_date' => '240818',
+        'date_of_birth' => '06-06-95',
+        'expiry_date' => '09-02-29',
         'passport_number' => 'A10811226',
         'nationality' => 'NIGERIAN',
     ]);
@@ -18,6 +18,6 @@ test('passport export includes issue date in the exported rows and headings', fu
     $export = new PassportsExport();
     $row = $export->collection()->first();
 
-    expect($row['issue_date'])->toBe('190819')
+    expect($row['issue_date'])->toBe('10-02-24')
         ->and($export->headings())->toContain('Issue Date');
 });

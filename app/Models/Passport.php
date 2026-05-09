@@ -29,22 +29,45 @@ class Passport extends Model
         }
 
         $expiryDate = trim((string) $this->expiry_date);
+        $parsedDate = $this->parsePassportDate($expiryDate);
 
-        if (preg_match('/^\d{6}$/', $expiryDate)) {
-            $parsedDate = CarbonImmutable::createFromFormat('ymd', $expiryDate);
+        if ($parsedDate === null) {
+            return null;
+        }
 
-            if ($parsedDate !== false) {
-                return $parsedDate->subYears(5)->addDay()->format('ymd');
+        return $parsedDate['date']
+            ->subYears(5)
+            ->addDay()
+            ->format($parsedDate['output_format']);
+    }
+
+    private function parsePassportDate(string $value): ?array
+    {
+        $formats = [
+            ['d-m-y', 'd-m-y'],
+            ['d/m/y', 'd/m/y'],
+            ['d.m.y', 'd.m.y'],
+            ['dmy', 'dmy'],
+            ['d-m-Y', 'd-m-Y'],
+            ['d/m/Y', 'd/m/Y'],
+            ['d.m.Y', 'd.m.Y'],
+            ['Y-m-d', 'Y-m-d'],
+            ['Y/m/d', 'Y/m/d'],
+            ['Y.m.d', 'Y.m.d'],
+            ['Ymd', 'Ymd'],
+        ];
+
+        foreach ($formats as [$inputFormat, $outputFormat]) {
+            $parsedDate = CarbonImmutable::createFromFormat('!' . $inputFormat, $value);
+
+            if ($parsedDate !== false && $parsedDate->format($inputFormat) === $value) {
+                return [
+                    'date' => $parsedDate,
+                    'output_format' => $outputFormat,
+                ];
             }
         }
 
-        try {
-            return CarbonImmutable::parse($expiryDate)
-                ->subYears(5)
-                ->addDay()
-                ->format('Y-m-d');
-        } catch (\Throwable) {
-            return null;
-        }
+        return null;
     }
 }
