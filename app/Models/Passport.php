@@ -14,31 +14,67 @@ class Passport extends Model
         'gender',
         'date_of_birth',
         'expiry_date',
+        'validity_years',
         'passport_number',
         'nationality',
+    ];
+
+    protected $casts = [
+        'validity_years' => 'integer',
     ];
 
     protected $appends = [
         'issue_date',
     ];
 
+    public function getDateOfBirthAttribute(?string $value): ?string
+    {
+        return $this->formatPassportDateValue($value);
+    }
+
+    public function getExpiryDateAttribute(?string $value): ?string
+    {
+        return $this->formatPassportDateValue($value);
+    }
+
     public function getIssueDateAttribute(): ?string
     {
-        if (blank($this->expiry_date)) {
+        $expiryDate = $this->attributes['expiry_date'] ?? null;
+
+        if (blank($expiryDate)) {
             return null;
         }
 
-        $expiryDate = trim((string) $this->expiry_date);
-        $parsedDate = $this->parsePassportDate($expiryDate);
+        $parsedDate = $this->parsePassportDate(trim((string) $expiryDate));
 
         if ($parsedDate === null) {
             return null;
         }
 
         return $parsedDate['date']
-            ->subYears(5)
+            ->subYears($this->validityYears())
             ->addDay()
-            ->format($parsedDate['output_format']);
+            ->format('d/m/Y');
+    }
+
+    public function validityYears(): int
+    {
+        return in_array($this->validity_years, [5, 10], true)
+            ? $this->validity_years
+            : 5;
+    }
+
+    private function formatPassportDateValue(?string $value): ?string
+    {
+        if (blank($value)) {
+            return $value;
+        }
+
+        $parsedDate = $this->parsePassportDate(trim($value));
+
+        return $parsedDate === null
+            ? $value
+            : $parsedDate['date']->format('d/m/Y');
     }
 
     private function parsePassportDate(string $value): ?array
@@ -63,7 +99,6 @@ class Passport extends Model
             if ($parsedDate !== false && $parsedDate->format($inputFormat) === $value) {
                 return [
                     'date' => $parsedDate,
-                    'output_format' => $outputFormat,
                 ];
             }
         }

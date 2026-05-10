@@ -19,6 +19,12 @@ class PassportCapture extends Component
     public string $lga = '';
     public string $rawData = '';
     public int $captureCount = 0;
+    public bool $showIssueDateModal = false;
+    public ?int $editingPassportId = null;
+    public string $editingPassportNumber = '';
+    public string $editingExpiryDate = '';
+    public string $editingIssueDate = '';
+    public int $editingValidityYears = 5;
 
     #[Url]
     public string $search = '';
@@ -148,6 +154,45 @@ class PassportCapture extends Component
         $this->dispatch('toast', type: 'success', message: 'All records deleted');
     }
 
+    public function openIssueDateModal(int $id): void
+    {
+        $passport = Passport::findOrFail($id);
+
+        $this->editingPassportId = $passport->id;
+        $this->editingPassportNumber = $passport->passport_number;
+        $this->editingExpiryDate = $passport->expiry_date;
+        $this->editingIssueDate = $passport->issue_date ?? '';
+        $this->editingValidityYears = $passport->validityYears();
+        $this->showIssueDateModal = true;
+    }
+
+    public function closeIssueDateModal(): void
+    {
+        $this->resetIssueDateModal();
+    }
+
+    public function updateIssueDateValidity(int $years): void
+    {
+        if (! in_array($years, [5, 10], true)) {
+            $this->dispatch('toast', type: 'error', message: 'Invalid passport validity selected');
+            return;
+        }
+
+        if ($this->editingPassportId === null) {
+            $this->dispatch('toast', type: 'error', message: 'No passport selected for editing');
+            return;
+        }
+
+        $passport = Passport::findOrFail($this->editingPassportId);
+        $passport->update([
+            'validity_years' => $years,
+        ]);
+
+        $this->captureCount = Passport::count();
+        $this->dispatch('toast', type: 'success', message: "Issue date updated using {$years}-year validity");
+        $this->resetIssueDateModal();
+    }
+
     protected function parseRawData(string $raw): array
     {
         $parts = explode(',', $raw);
@@ -188,5 +233,15 @@ class PassportCapture extends Component
         return view('livewire.passport-capture', [
             'passports' => $query->latest()->paginate(10),
         ]);
+    }
+
+    protected function resetIssueDateModal(): void
+    {
+        $this->showIssueDateModal = false;
+        $this->editingPassportId = null;
+        $this->editingPassportNumber = '';
+        $this->editingExpiryDate = '';
+        $this->editingIssueDate = '';
+        $this->editingValidityYears = 5;
     }
 }

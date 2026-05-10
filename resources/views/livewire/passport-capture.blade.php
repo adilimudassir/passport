@@ -152,13 +152,23 @@
                             <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->issue_date }}</td>
                             <td class="px-4 py-3 font-mono text-emerald-400">{{ $passport->expiry_date }}</td>
                             <td class="px-4 py-3 text-right">
-                                <button wire:click="deletePassport({{ $passport->id }})"
-                                        wire:confirm="Delete this record?"
-                                        class="text-slate-500 hover:text-red-400 transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
+                                <div class="inline-flex items-center gap-2">
+                                    <button wire:click="openIssueDateModal({{ $passport->id }})"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-700/50 hover:text-emerald-400"
+                                            title="Edit issue date validity">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6.768-6.768a2.5 2.5 0 113.536 3.536L12.536 14.536a2 2 0 01-.878.515L8 16l.949-3.658A2 2 0 019.464 11.464z" />
+                                        </svg>
+                                    </button>
+                                    <button wire:click="deletePassport({{ $passport->id }})"
+                                            wire:confirm="Delete this record?"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-700/50 hover:text-red-400"
+                                            title="Delete record">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -188,6 +198,60 @@
             </div>
             @endif
         </div>
+
+        @if($showIssueDateModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 px-4" wire:key="issue-date-modal">
+            <div class="w-full max-w-md overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900 shadow-2xl">
+                <div class="flex items-start justify-between border-b border-slate-700/60 px-5 py-4">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-100">Update Issue Date</h2>
+                        <p class="mt-1 text-sm text-slate-400">Choose the passport validity to recalculate and save the issue date immediately.</p>
+                    </div>
+                    <button wire:click="closeIssueDateModal"
+                            class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200"
+                            title="Close">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="space-y-4 px-5 py-4">
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-3">
+                            <p class="text-xs uppercase tracking-wide text-slate-500">Document Number</p>
+                            <p class="mt-1 font-mono text-sm text-slate-100">{{ $editingPassportNumber }}</p>
+                        </div>
+                        <div class="rounded-lg border border-slate-700/50 bg-slate-800/60 p-3">
+                            <p class="text-xs uppercase tracking-wide text-slate-500">Expiry Date</p>
+                            <p class="mt-1 font-mono text-sm text-emerald-400">{{ $editingExpiryDate }}</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-lg border border-slate-700/50 bg-slate-800/40 p-3">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">Current Issue Date</p>
+                        <p class="mt-1 font-mono text-sm text-slate-100">{{ $editingIssueDate ?: 'Not available' }}</p>
+                        <p class="mt-2 text-xs text-slate-500">Current validity: <span class="text-slate-300">{{ $editingValidityYears }} years</span></p>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <button wire:click="updateIssueDateValidity(5)"
+                                wire:loading.attr="disabled"
+                                class="inline-flex min-h-24 flex-col items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/70 px-4 py-4 text-center transition-colors hover:border-emerald-500/60 hover:bg-slate-800 disabled:opacity-50">
+                            <span class="text-sm font-semibold text-slate-100">5 Years</span>
+                            <span class="mt-1 text-xs text-slate-400">Standard passport validity</span>
+                        </button>
+                        <button wire:click="updateIssueDateValidity(10)"
+                                wire:loading.attr="disabled"
+                                class="inline-flex min-h-24 flex-col items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/70 px-4 py-4 text-center transition-colors hover:border-cyan-500/60 hover:bg-slate-800 disabled:opacity-50">
+                            <span class="text-sm font-semibold text-slate-100">10 Years</span>
+                            <span class="mt-1 text-xs text-slate-400">Extended passport validity</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </main>
 </div>
 
