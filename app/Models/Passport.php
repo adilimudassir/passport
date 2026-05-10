@@ -94,7 +94,11 @@ class Passport extends Model
         ];
 
         foreach ($formats as [$inputFormat, $outputFormat]) {
-            $parsedDate = CarbonImmutable::createFromFormat('!' . $inputFormat, $value);
+            try {
+                $parsedDate = CarbonImmutable::createFromFormat('!' . $inputFormat, $value);
+            } catch (\Throwable) {
+                continue;
+            }
 
             if ($parsedDate !== false && $parsedDate->format($inputFormat) === $value) {
                 return [
