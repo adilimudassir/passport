@@ -22,3 +22,4 @@ yarn-error.log
 /.zed
 /dist
 .DS_Store
+/node_modules
